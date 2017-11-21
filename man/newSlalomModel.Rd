@@ -17,7 +17,8 @@ gene sets}
 \item{n_hidden}{number of hidden factors to fit in the model (2-5 recommended)}
 
 \item{prune_genes}{logical, should genes that are not annotated to any gene
-sets be filtered out?}
+sets be filtered out? If \code{TRUE}, then any genes with zero variance in
+expression are also filtered out.}
 
 \item{min_genes}{scalar, minimum number of genes required in order to retain
 a gene set for analysis}

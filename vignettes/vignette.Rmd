@@ -57,6 +57,7 @@ exprs_matrix <- SingleCellExperiment::logcounts(mesc)
 mesc <- SingleCellExperiment::SingleCellExperiment(
     assays = list(logcounts = exprs_matrix)
 )
+
 ```
 
 We also need to supply `slalom` with genesets in a `GeneSetCollection` object.

@@ -14,7 +14,8 @@
 #' gene sets
 #' @param n_hidden number of hidden factors to fit in the model (2-5 recommended)
 #' @param prune_genes logical, should genes that are not annotated to any gene
-#' sets be filtered out?
+#' sets be filtered out? If \code{TRUE}, then any genes with zero variance in
+#' expression are also filtered out.
 #' @param min_genes scalar, minimum number of genes required in order to retain
 #' a gene set for analysis
 #' @param design numeric design matrix providing values for covariates to fit in
@@ -78,6 +79,17 @@ newSlalomModel <- function(
     names(I) <- names(genesets)
     I <- as.matrix(as.data.frame(I))
     rownames(I) <- colnames(Y)
+    ## check for zero-variance genes
+    n_cells <- nrow(Y)
+    var_y_col <- (n_cells / (n_cells - 1) *
+                      (colMeans(Y * Y) - colMeans(Y) ^ 2))
+    if (prune_genes) {
+        Y <- Y[, var_y_col > 0L]
+        I <- I[var_y_col > 0L,]
+    } else {
+        if (!all(var_y_col > 0L) )
+            stop("Some genes have zero variance in expression. Please filter these out.")
+    }
     ## filter genesets on min_genes
     n_sets_pass <- colSums(I) >= min_genes
     if (sum(n_sets_pass) > 0L) {
@@ -218,6 +230,11 @@ initSlalom <- function(
     verbose = FALSE, save_init = FALSE) {
     if (!methods::is(object, "Rcpp_SlalomModel"))
         stop("object must be of class Rcpp_SlalomModel")
+    n_cells <- nrow(object$Y)
+    var_y_col <- (n_cells / (n_cells - 1) *
+                      (colMeans(object$Y * object$Y) - colMeans(object$Y) ^ 2))
+    if (!all(var_y_col > 0L))
+        stop("Some genes have zero variance in expression. Please filter these out.")
     ## if Pi priors are supplied, need to redefine object
     if (!is.null(pi_prior)) {
         if (is.null(n_hidden))

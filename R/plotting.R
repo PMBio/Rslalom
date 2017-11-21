@@ -139,6 +139,8 @@ plotLoadings <- function(object, term, n_genes = 10) {
 
 #' Plot relevance for all terms
 #'
+#'
+#'
 #' @param object an object of class \code{Rcpp_SlalomModel}
 #' @param terms integer or character vector, providing either indices for
 #' desired terms (if an integer) or the term names (if character); default is
