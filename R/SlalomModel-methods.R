@@ -436,7 +436,7 @@ trainSlalom <- function(
     ## fit pca
     if (!is.null(seed))
         set.seed(seed)
-    if (object$N < 500)
+    if (object$N < 50000)
         pca <- stats::prcomp(object$Y, rank. = 1, retx = TRUE)
     else
         pca <- rsvd::rpca(object$Y, k = 1, retx = TRUE)
