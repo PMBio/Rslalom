@@ -332,7 +332,7 @@ initSlalom <- function(
         object$W_E1[, k] <- sqrt(1.0 / object$K) * stats::rnorm(object$G)
         object$X_diagSigmaS[, k] <- 1.0 / 2
         if (sum(Ion[,k]) > 5) {
-            if (object$N < 500)
+            if (object$N < 50000)
                 pca <- stats::prcomp(Ystd[, Ion[, k]], rank. = 1, retx = TRUE)
             else
                 pca <- rsvd::rpca(Ystd[, Ion[, k]], k = 1, retx = TRUE)
