@@ -332,10 +332,10 @@ initSlalom <- function(
         object$W_E1[, k] <- sqrt(1.0 / object$K) * stats::rnorm(object$G)
         object$X_diagSigmaS[, k] <- 1.0 / 2
         if (sum(Ion[,k]) > 5) {
-            if (object$N < 50000)
+            if (object$N < 500)
                 pca <- stats::prcomp(Ystd[, Ion[, k]], rank. = 1, retx = TRUE)
             else
-                pca <- rsvd::rpca(Ystd[, Ion[, k]], k = 1, retx = TRUE)
+                pca <- rsvd::rpca(Ystd[, Ion[, k]], k = 2, retx = TRUE)
             object$X_E1[, k] <- scale(pca$x[, 1])
         } else {
             object$X_E1[, k] <- stats::rnorm(object$N)
@@ -439,9 +439,9 @@ trainSlalom <- function(
     if (object$N < 50000)
         pca <- stats::prcomp(object$Y, rank. = 1, retx = TRUE)
     else
-        pca <- rsvd::rpca(object$Y, k = 1, retx = TRUE)
+        pca <- rsvd::rpca(object$Y, k = 2, retx = TRUE)
     ## sort by correlation to PC1
-    mpc <- abs(stats::cor(object$X_E1, pca$x))[-c(1:n_fix)]
+    mpc <- abs(stats::cor(object$X_E1, pca$x[,1]))[-c(1:n_fix)]
     Ipi <- order(mpc, decreasing = TRUE)
     IpiRev <- rev(Ipi)
     ## organise for fitting fwd and rev models
