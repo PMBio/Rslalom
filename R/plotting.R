@@ -117,13 +117,13 @@ plotLoadings <- function(object, term, n_genes = 10) {
     Wabs <- abs(W) * abs(Z)
     gene_index <- order(Wabs, decreasing = TRUE)[1:n_genes]
 
-    anno <- rep("in geneset", length(Z))
+    anno <- rep("in geneset", length(gene_index))
     anno[Zchanged[gene_index] == 1] <- "gained"
 
     df <- data.frame(
         gene = gene_labels[gene_index],
         absolute_weight = Wabs[gene_index],
-        Annotation = anno[gene_index]
+        Annotation = anno
     )
     df[["gene"]] <- factor(df[["gene"]],
                            levels = rev(df[["gene"]]))
