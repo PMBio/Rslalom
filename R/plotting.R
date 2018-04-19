@@ -83,6 +83,12 @@ plotRelevance <- function(
 #' term (if an integer) or the term name (if character)
 #' @param n_genes integer(1), number of loadings (genes) to show
 #'
+#' @details Show the factor loadings for a genes with the highest loadings for
+#' a given factor. Absolute weights are shown, with genes ordered by absolute
+#' weight. Indications are given on the plot as to whether the gene was
+#' originally in the factor geneset or added to it by the slalom model.
+#'
+#'
 #' @return a ggplot plot object
 #'
 #' @export
@@ -204,7 +210,7 @@ plotTerms <- function(
 
 
 
-## Get posterior of Z (Bernourlli part part of spike-and-slab prior) :math:`Q(Z)`
+## Get posterior of Z (Bernoulli part of spike-and-slab prior) :math:`Q(Z)`
 ## Args: term        (str): optional list of terms for which weights are returned. Default None=all terms.
 .getZ <- function(object, terms = NULL) {
     if (is.null(terms))
@@ -228,8 +234,3 @@ plotTerms <- function(
     I[Iloss] <- -1
     I
 }
-
-
-
-
-
