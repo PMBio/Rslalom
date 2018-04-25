@@ -64,6 +64,17 @@ public:
     arma::vec epsilon_E1;
     arma::vec epsilon_lnE1;
     arma::vec epsilon_diagSigmaS;
+    // declare necessary variables for Z
+    arma::mat Z_E1;
+    // expression matrix variables
+    arma::mat Y;
+    arma::mat pseudo_Y;
+    arma::vec YY;
+    // declare pi variables
+    arma::mat Pi_a;
+    arma::mat Pi_b;
+    arma::mat Pi_pa;
+    arma::mat Pi_E1;
     // declare necessary variables for X
     arma::mat X_E1;
     arma::mat X_diagSigmaS;
@@ -74,18 +85,9 @@ public:
     arma::mat W_E2diag;
     arma::mat W_gamma0;
     arma::mat W_gamma1;
-    // declare necessary variables for Z
-    arma::mat Z_E1;
     // declare other variables
-    arma::mat I;
-    arma::mat Pi_a;
-    arma::mat Pi_b;
-    arma::mat Pi_pa;
-    arma::mat Pi_E1;
-    arma::mat Y;
-    arma::mat pseudo_Y;
-    arma::vec YY;
     arma::mat Known;
+    arma::mat I;
     int K;
     int N;
     int G;
@@ -125,8 +127,8 @@ public:
     SlalomModel() {}
     SlalomModel(arma::mat Y_init, arma::mat pi_init, arma::mat X_init,
                 arma::mat W_init, arma::vec prior_alpha, arma::vec prior_epsilon) :
-        Y(Y_init), Pi_E1(pi_init), I(pi_init), W_gamma0(pi_init), X_E1(X_init),
-        W_E1(W_init) {
+        Y(Y_init), Pi_E1(pi_init), X_E1(X_init), W_E1(W_init), W_gamma0(pi_init),
+        I(pi_init) {
         K = pi_init.n_cols;
         N = Y_init.n_rows;
         G = Y_init.n_cols;

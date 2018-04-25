@@ -6,3 +6,4 @@
 ^appveyor\.yml$
 ^\.git*
 inst/.ipynb_checkpoints
+.ipynb_checkpoints

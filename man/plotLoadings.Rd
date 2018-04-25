@@ -20,6 +20,12 @@ a ggplot plot object
 \description{
 Plot highest loadings of a factor
 }
+\details{
+Show the factor loadings for a genes with the highest loadings for
+a given factor. Absolute weights are shown, with genes ordered by absolute
+weight. Indications are given on the plot as to whether the gene was
+originally in the factor geneset or added to it by the slalom model.
+}
 \examples{
 gmtfile <- system.file("extdata", "reactome_subset.gmt", package = "slalom")
 genesets <- GSEABase::getGmt(gmtfile)

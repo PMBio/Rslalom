@@ -28,6 +28,18 @@ test_that("SlalomModel initialises", {
 
 })
 
+test_that("SlalomModel initialises with more than 500 cells", {
+    gmtfile <- system.file("extdata", "reactome_subset.gmt", package = "slalom")
+    genesets <- GSEABase::getGmt(gmtfile)
+    data("mesc")
+    tmp_sce <- cbind(mesc, mesc, mesc)
+    logcounts(tmp_sce) <- (logcounts(tmp_sce) +
+        matrix(2 * rnorm(nrow(tmp_sce) * ncol(tmp_sce)), nrow = nrow(tmp_sce)))
+    model <- newSlalomModel(tmp_sce,
+                            genesets, n_hidden = 5, min_genes = 10)
+    model <- initSlalom(model)
+    expect_that(model, is_a("Rcpp_SlalomModel"))
+})
 
 test_that("SlalomModel trains", {
     gmtfile <- system.file("extdata", "reactome_subset.gmt", package = "slalom")
