@@ -88,6 +88,10 @@ plotRelevance <- function(
 #' weight. Indications are given on the plot as to whether the gene was
 #' originally in the factor geneset or added to it by the slalom model.
 #'
+#' If more genes are shown (n_genes) than are in the geneset or added to the
+#' geneset based on sufficient weight and relevance, then these genes will be
+#' shown in the plot in grey, with the "low weight" annotation.
+#'
 #'
 #' @return a ggplot plot object
 #'
@@ -117,7 +121,8 @@ plotLoadings <- function(object, term, n_genes = 10) {
     Wabs <- abs(W) * abs(Z)
     gene_index <- order(Wabs, decreasing = TRUE)[1:n_genes]
 
-    anno <- rep("in geneset", length(gene_index))
+    anno <- ifelse(object$I[gene_index, term] > 0.5,
+                   "in geneset", "low weight")
     anno[Zchanged[gene_index] == 1] <- "gained"
 
     df <- data.frame(
@@ -127,6 +132,8 @@ plotLoadings <- function(object, term, n_genes = 10) {
     )
     df[["gene"]] <- factor(df[["gene"]],
                            levels = rev(df[["gene"]]))
+    df[["Annotation"]] <- factor(df[["Annotation"]],
+                           levels = c("in geneset", "gained", "low weight"))
 
     ggplot(df, aes_string(x = "absolute_weight", y = "gene",
                           colour = "Annotation")) +
@@ -137,9 +144,10 @@ plotLoadings <- function(object, term, n_genes = 10) {
         xlab("Abs. weight") +
         ylab("Genes") +
         geom_point(size = 3) +
-        scale_color_manual(values = c("dodgerblue", "firebrick")) +
+        scale_color_manual(values = c("dodgerblue", "firebrick", "gray60"),
+                           drop = FALSE) +
         theme_classic() + theme(legend.justification = c(1, 0),
-                                legend.position = c(0.99,0.01))
+                                legend.position = c(0.99, 0.01))
 }
 
 
@@ -174,6 +182,7 @@ plotLoadings <- function(object, term, n_genes = 10) {
 #' model <- initSlalom(model)
 #' model <- trainSlalom(model, nIterations = 10)
 #' plotTerms(model)
+#' plotTerms(model, unannotated_dense = FALSE)
 plotTerms <- function(
     object, terms = NULL, order_terms = TRUE, mad_filter = 0.2,
     annotated = TRUE, unannotated_dense = TRUE, unannotated_sparse = FALSE) {
@@ -188,6 +197,9 @@ plotTerms <- function(
 
     df <- topTerms(object, n_active = object$K, mad_filter, annotated,
                    unannotated_dense, unannotated_sparse)
+    ## trim extreme term names
+    df[["term"]] <- substr(df[["term"]], 1, 40)
+    ## order terms for nice plotting
     if (order_terms)
         df[["term"]] <- factor(df[["term"]], levels = rev(df[["term"]]))
     else
